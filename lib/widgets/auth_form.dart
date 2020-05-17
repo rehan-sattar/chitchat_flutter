@@ -1,6 +1,15 @@
 import 'package:flutter/material.dart';
 
 class AuthForm extends StatefulWidget {
+  AuthForm(this.submitFn, this.isLoading);
+  final Future<void> Function(
+    String email,
+    String password,
+    String username,
+    bool isLogin,
+    BuildContext ctx,
+  ) submitFn;
+  final bool isLoading;
   @override
   _AuthFormState createState() => _AuthFormState();
 }
@@ -16,6 +25,13 @@ class _AuthFormState extends State<AuthForm> {
     if (_formKey.currentState.validate()) {
       FocusScope.of(context).unfocus();
       _formKey.currentState.save();
+      widget.submitFn(
+        _email.trim(),
+        _password.trim(),
+        _username.trim(),
+        _isLogin,
+        context,
+      );
     }
   }
 
@@ -75,10 +91,12 @@ class _AuthFormState extends State<AuthForm> {
                     },
                   ),
                   SizedBox(height: 10.0),
-                  RaisedButton(
-                    child: Text(_isLogin ? 'Login' : 'Signup'),
-                    onPressed: _submitForm,
-                  ),
+                  if (widget.isLoading) CircularProgressIndicator(),
+                  if (!widget.isLoading)
+                    RaisedButton(
+                      child: Text(_isLogin ? 'Login' : 'Signup'),
+                      onPressed: _submitForm,
+                    ),
                   FlatButton(
                     textColor: Theme.of(context).primaryColor,
                     child: Text(
