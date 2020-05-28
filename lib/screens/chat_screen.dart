@@ -27,6 +27,7 @@ class _ChatScreenState extends State<ChatScreen> {
         title: Text('Chats'),
         actions: <Widget>[
           DropdownButton(
+            underline: Container(),
             icon: Icon(
               Icons.more_vert,
               color: Colors.white,
